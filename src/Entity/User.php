@@ -7,13 +7,16 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ApiResource()
+ * @UniqueEntity("email", message="This mail adress already exists")
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -28,6 +31,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      * @Groups({"invoices_read", "custpmers_read", "invoices_subresource"})
+     * @Assert\NotBlank(message="The firstname is mandatory")
+     * @Assert\Email(message="The email {{ value }} is not a valid format.")
      */
     private $email;
 
@@ -39,18 +44,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     * @Assert\NotBlank(message="The firstname is mandatory")
      */
     private $password;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"invoices_read", "custpmers_read", "invoices_subresource"})
+     * @Assert\NotBlank(message="The lastName is mandatory.")
+     * @Assert\Length(
+     *     min=3, minMessage="lastName should be at least 3 caracters.",
+     *     max=255, maxMessage="lastName should be at most 255 caracters."
+     * )
      */
     private $lastName;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"invoices_read", "custpmers_read", "invoices_subresource"})
+     * @Assert\NotBlank(message="The firstname is mandatory.")
+     * @Assert\Length(
+     *     min=3, minMessage="firstname should be at least 3 caracters.",
+     *     max=255, maxMessage="firstname should be at most 255 caracters."
+     * )
      */
     private $firstName;
 
