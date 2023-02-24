@@ -15,7 +15,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
- * @ApiResource()
+ * @ApiResource(
+ *     normalizationContext={
+ *          "groups"="users_read"
+ *     }
+ * )
  * @UniqueEntity("email", message="This mail adress already exists")
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
@@ -24,13 +28,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"invoices_read", "custpmers_read", "invoices_subresource"})
+     * @Groups({"invoices_read", "custpmers_read", "invoices_subresource","users_read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Groups({"invoices_read", "custpmers_read", "invoices_subresource"})
+     * @Groups({"invoices_read", "custpmers_read", "invoices_subresource","users_read"})
      * @Assert\NotBlank(message="The firstname is mandatory")
      * @Assert\Email(message="The email {{ value }} is not a valid format.")
      */
@@ -50,7 +54,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"invoices_read", "custpmers_read", "invoices_subresource"})
+     * @Groups({"invoices_read", "custpmers_read", "invoices_subresource","users_read"})
      * @Assert\NotBlank(message="The lastName is mandatory.")
      * @Assert\Length(
      *     min=3, minMessage="lastName should be at least 3 caracters.",
@@ -61,7 +65,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"invoices_read", "custpmers_read", "invoices_subresource"})
+     * @Groups({"invoices_read", "custpmers_read", "invoices_subresource", "users_read"})
      * @Assert\NotBlank(message="The firstname is mandatory.")
      * @Assert\Length(
      *     min=3, minMessage="firstname should be at least 3 caracters.",
